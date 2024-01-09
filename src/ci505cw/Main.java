@@ -8,9 +8,12 @@
 package ci505cw;
 
 
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 // Purposely chose Command Line, it will take way too long to program a JavaFX UI at this point in time.
@@ -19,33 +22,27 @@ import java.util.Scanner;
 
 public class Main {
 
+	static List<String> fnames = List.of(
+			"Adam", "Freddie", "Julie", "Alex", "Rhys", "John",
+			"Liam", "Harry", "Riley", "Sara", "Julius", "Fransizka",
+			"Norman", "Rupert", "Marie", "Lauren", "Hugh", "Jack", "Samantha", "Michelle",
+			"Mitchell", "Ryan", "Lucas");
+	static List<String> snames = List.of(
+			"Smith", "Green", "Jones", "Gant", "Truman", "DeSouza",
+			"Norman", "Laurie", "Brinson", "Johnson", "Gates", "Penfold",
+			"Lines", "Brode", "Joake", "Hughes", "Barrowman", "McCreaves", "Holmes", "Watson",
+			"Pond", "Williams", "Cooper");
+	static List<Courses> courselist = List.of(Courses.CS, Courses.CSG, Courses.ICT, Courses.SE);
+	static List<Module> modulelist = List.of(Module.CI404, Module.CI505, Module.CI553, Module.CI556);
+	static List<String> yearslist = List.of("2020","2021","2022","2023","2024");
 	
+	static List<Student> students = new ArrayList<>();
 	
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("CI505 - Student Database App [by Ryan Penfold]");
 		// Initiliaze the student data....
-		List<Student> students = Arrays.asList(
-				new Student(1, "Adam", "Kelly", Courses.SE, Module.CI404, "2024"),
-				new Student(2, "Frederick", "Hamilton", Courses.CS, Module.CI505, "2024"),
-				new Student(3, "Henry", "Smith", Courses.CSG, Module.CI404, "2024"),
-				new Student(4, "Sara", "Smith", Courses.ICT, Module.CI553, "2024"),
-				new Student(5, "Lexi", "Con", Courses.ICT, Module.CI556, "2024"),
-				new Student(6, "Rupert", "Jones", Courses.CSG, Module.CI404, "2023"),
-				new Student(7, "Rhys", "Williams", Courses.SE, Module.CI505, "2023"),
-				new Student(8, "Amanda", "Huggins", Courses.CS, Module.CI505, "2023"),
-				new Student(9, "Beatrice", "Tills", Courses.CS, Module.CI505, "2023"),
-				new Student(10, "Riley", "Jones", Courses.ICT, Module.CI404, "2023"),
-				new Student(11, "Oliver", "Twist", Courses.CSG, Module.CI553, "2022"),
-				new Student(12, "Samantha", "Gant", Courses.CSG, Module.CI556, "2022"),
-				new Student(13, "Phoenix", "Wright", Courses.ICT, Module.CI404, "2022"),
-				new Student(14, "Ianto", "Jones", Courses.SE, Module.CI505, "2022"),
-				new Student(15, "Lauren", "DeSouza", Courses.CSG, Module.CI505, "2022"),
-				new Student(16, "Gerald", "Mark", Courses.CS, Module.CI556, "2021"),
-				new Student(17, "Rudolph", "Joake", Courses.CS, Module.CI505, "2021"),
-				new Student(18, "Tom", "Green", Courses.ICT,Module.CI505, "2021"),
-				new Student(19, "Daisy", "Laurie", Courses.SE,Module.CI505, "2021"),
-				new Student(20, "Naomi", "Nomor", Courses.CSG,Module.CI404, "2021")
-		);
+		populateDatabase(20);
+				
 		
 		
 		/// For loop, lamba function listing the students. COMMENTED OUT FOR EXTENSION
@@ -68,7 +65,7 @@ public class Main {
 				int mmOption = in.nextInt(); // Sets 'Main Menu' Option
 				switch(mmOption) {
 				case 1:
-					createStudent(students.size() + 1);
+					students.add(createStudent(students.size() + 1));
 					break;
 				
 				case 2:
@@ -83,8 +80,8 @@ public class Main {
 				
 				case 4:
 					searchRun(students);
-					
 					break;
+					
 				case 5:
 					i = 0;
 					break;
@@ -201,13 +198,27 @@ public class Main {
 				+ "(CI followed by 404/505/553/556): ");
 		String modulecode = in.next().toUpperCase();
 		
-		module = Courses.valueOf(modulecode);
+		module = Module.valueOf(modulecode);
 		
 		System.out.println("\nPlease enter the student's starting year: ");
 		year = in.next();
 		
 		return new Student(id, firstName, surename, course, module, year);
 
+	}
+	
+	public static void populateDatabase(int rounds) {
+		Random rand = new Random(); // https://stackoverflow.com/questions/5887709/getting-random-numbers-in-java
+		for(int i = 1; i<rounds+1;i++) {
+			students.add(new Student(i, 
+					fnames.get(rand.nextInt(20)), 
+					snames.get(rand.nextInt(20)), 
+					courselist.get(rand.nextInt(4)), 
+					modulelist.get(rand.nextInt(4)), 
+					yearslist.get(rand.nextInt(5))					
+					));
+		}
+		System.out.println(rounds + " student records generated.");
 	}
 	
 }
